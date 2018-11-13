@@ -8,7 +8,7 @@ class Socio {
 	method addIdioma(idioma){
 		idiomasQHabla.add(idioma)
 	}
-	method getIdioma(){
+	method getIdiomas(){
 		return idiomasQHabla.asList()
 	}
 	

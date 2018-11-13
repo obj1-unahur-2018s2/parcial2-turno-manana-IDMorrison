@@ -1,0 +1,7 @@
+import tallerLiterario.*
+
+describe "test Taller Literario"{
+	const taller = new TallerLiterario()
+	const libro1 = new Libro()
+	const libro1 = new Libro ()
+}

@@ -1,5 +1,5 @@
 import viajes.*
-import clases.*
+import claseGimnasia.*
 import socios.*
 
 describe "test viajes"{
@@ -114,7 +114,27 @@ describe "test viajes"{
 		assert.that(ana.leAtraeActividad(cTropical))
 	}
 	
-	test "actividadesRecomendadas"{
-		assert.that(cTropical.recomendadaA(ana))
+	test "actRecomendadas / caso 1"{
+		// es interesante, el socio no realizao el viaje, pero no satisface 
+		// que la cant de dias sea >= 4
+		pepito.cantMaxActiv(3)
+		assert.notThat(cTropical.recomendadaA(pepito))
+		cTropical.cantAtracciones(20)
+		assert.that(cTropical.recomendadaA(pepito))
+		pepito.registrarActividad(cTropical)
+		assert.notThat(cTropical.recomendadaA(pepito))
+	}
+	
+	test "actRecomendadas / caso 2"{
+		// NO es interesante, el socio no realizao el viaje, y le atrae
+		
+		assert.notThat(trekking.recomendadaA(roque))
+		trekking.agregarIdioma("Español")
+		assert.notThat(trekking.recomendadaA(roque))
+	}
+	
+	test "actRecomendadas / caso ClaseGimnasia"{
+		pepito.edad(25)
+		assert.that(gim.recomendadaA(pepito))
 	}
 }
