@@ -1,0 +1,120 @@
+import viajes.*
+import clases.*
+import socios.*
+
+describe "test viajes"{
+	const playa = new ViajePlaya()
+	const playa1 = new ViajePlaya()
+	const ciudad = new ViajeCiudad()
+	const cTropical = new ViajeCiudadTropical()
+	const trekking = new SalidaTrekking()
+	const gim = new ClaseGimnasia()
+	
+	const pepito = new SocioTranquilo()
+	const roque = new SocioCoherente()
+	const ana = new SocioRelajado()
+	
+	fixture {
+		playa.agregarIdioma("Portugues")
+		playa.largoPlaya(1000)
+		playa1.largoPlaya(2000)
+		
+		ciudad.agregarIdioma("Aleman")
+		ciudad.cantAtracciones(4)
+		cTropical.cantAtracciones(4)
+		cTropical.agregarIdioma("Portugues")
+		cTropical.agregarIdioma("Español")
+		
+		trekking.agregarIdioma("Portugues")
+		trekking.diasSolXAnio(120)
+		trekking.kmsSenderos(100)
+		
+		roque.cantMaxActiv(2)
+		ana.cantMaxActiv(3)
+		
+	}
+	
+	test "playa"{
+		assert.notThat(playa.implicaEsfuerzo())
+		assert.equals(2,playa.diasActividad())
+		assert.that(playa.sirveParaBroncearse())
+		
+		assert.notThat(playa.esInteresante())
+	}
+	
+	test "ciudad/tropical"{
+		assert.notThat(ciudad.implicaEsfuerzo())
+		assert.equals(2,ciudad.diasActividad())
+		assert.notThat(ciudad.sirveParaBroncearse())
+		assert.notThat(ciudad.esInteresante())
+		ciudad.cantAtracciones(5)
+		assert.that(ciudad.esInteresante())
+		assert.that(ciudad.implicaEsfuerzo())
+		
+		assert.notThat(cTropical.implicaEsfuerzo())
+		assert.equals(3,cTropical.diasActividad())
+		assert.that(cTropical.sirveParaBroncearse())
+		assert.that(ciudad.esInteresante())
+	}
+	
+	test "salidaTrekking" {
+		assert.equals(2,trekking.diasActividad())
+		assert.that(trekking.implicaEsfuerzo())
+		assert.notThat(trekking.sirveParaBroncearse())
+		
+		trekking.diasSolXAnio(240)
+		trekking.kmsSenderos(50)
+		assert.equals(1,trekking.diasActividad())
+		assert.notThat(trekking.implicaEsfuerzo())
+		assert.that(trekking.sirveParaBroncearse())
+		
+		assert.notThat(trekking.esInteresante())
+		trekking.agregarIdioma("Español")
+		assert.that(trekking.esInteresante())
+	}
+	
+	test "Roque"{
+		roque.registrarActividad(playa)
+		roque.registrarActividad(playa1)
+		assert.that(roque.esAdoradorDelSol())
+		assert.equals([playa1],roque.actividadesEsforzadas())
+		assert.throwsException({roque.registrarActividad(trekking)})
+	}
+	
+	test "Ana"{
+		ana.registrarActividad(playa)
+		ana.registrarActividad(playa1)
+		assert.that(ana.esAdoradorDelSol())
+		ana.registrarActividad(gim)
+		assert.notThat(ana.esAdoradorDelSol())
+		assert.equals([playa1,gim],ana.actividadesEsforzadas())
+	}
+	
+	test "SocioTranquilo"{
+		trekking.kmsSenderos(500)
+		assert.that(pepito.leAtraeActividad(trekking))
+		trekking.kmsSenderos(50)
+		assert.notThat(pepito.leAtraeActividad(trekking))
+	}
+	
+	test "SocioCoherente"{
+		assert.notThat(roque.leAtraeActividad(gim))
+		trekking.diasSolXAnio(240)
+		trekking.kmsSenderos(50)
+		assert.that(roque.leAtraeActividad(trekking))
+	    roque.cantMaxActiv(3)
+	    roque.registrarActividad(ciudad)
+	    assert.notThat(roque.leAtraeActividad(trekking))
+	}
+	
+	test "SocioRelajado"{
+		ana.addIdioma("Aleman")
+		assert.notThat(ana.leAtraeActividad(cTropical))
+		ana.addIdioma("Portugues")
+		assert.that(ana.leAtraeActividad(cTropical))
+	}
+	
+	test "actividadesRecomendadas"{
+		assert.that(cTropical.recomendadaA(ana))
+	}
+}
