@@ -73,6 +73,13 @@ describe "test viajes"{
 		assert.that(trekking.esInteresante())
 	}
 	
+	test "gim"{
+		assert.equals(["Español"],gim.getIdiomas())
+		assert.equals(1,gim.diasActividad())
+		assert.that(gim.implicaEsfuerzo())
+		assert.notThat(gim.sirveParaBroncearse())
+	}
+	
 	test "Roque"{
 		roque.registrarActividad(playa)
 		roque.registrarActividad(playa1)

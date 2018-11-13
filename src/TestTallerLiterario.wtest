@@ -1,7 +1,55 @@
 import tallerLiterario.*
+import socios.*
 
 describe "test Taller Literario"{
 	const taller = new TallerLiterario()
 	const libro1 = new Libro()
-	const libro1 = new Libro ()
+	const libro2 = new Libro()
+	const libro3 = new Libro()
+	
+	fixture {
+		taller.addLibro(libro1)
+		taller.addLibro(libro2)
+		taller.addLibro(libro3)
+	}
+	
+	test "idiomasUsados"{
+		libro1.idioma("Español")
+		libro2.idioma("Español")
+		libro3.idioma("Aleman")
+		
+		assert.equals(#{"Español","Aleman"},taller.idiomasUsados())
+	}
+	
+	test "diasActividad"{
+		assert.equals(4,taller.diasActividad())
+	}
+	
+	test "implicaEsfuerzo" {
+		libro1.cantPaginas(50)
+		libro1.nomAutor("QueTi")
+		libro2.cantPaginas(50)
+		libro3.cantPaginas(50)
+		assert.notThat(taller.implicaEsfuerzo())
+		libro1.cantPaginas(501)
+		assert.that(taller.implicaEsfuerzo())
+		libro1.cantPaginas(50)
+		libro2.nomAutor("QueTi")
+		libro3.nomAutor("QueTi")
+		assert.that(taller.implicaEsfuerzo())
+		libro3.nomAutor("Juancito")
+		assert.notThat(taller.implicaEsfuerzo())
+	}
+	
+	test "sirveParaBroncearse"{
+		assert.notThat(taller.sirveParaBroncearse())
+	}
+	
+	test "recomendadoParaUnSocio"{
+		const pepin = new SocioCoherente()
+		pepin.addIdioma("Aleman")
+		assert.notThat(taller.recomendadaA(pepin))
+		pepin.addIdioma("Español")
+		assert.that(taller.recomendadaA(pepin))
+	}
 }

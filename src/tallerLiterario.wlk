@@ -1,7 +1,7 @@
 class TallerLiterario {
 	const librosUsados = []
 	
-	method addLibros(libro){
+	method addLibro(libro){
 		librosUsados.add(libro)
 	}
 	method getLibros(){
@@ -9,23 +9,24 @@ class TallerLiterario {
 	}
 
 	method idiomasUsados(){
-		return librosUsados.map({libro => libro.idioma()})
+		return librosUsados.map({libro => libro.idioma()}).asSet()
 	}
-	method diasQueLleva(){
+	method diasActividad(){
 		return librosUsados.size()+1
 	}
 	method implicaEsfuerzo(){
 		return self.libroHeavy() or self.fanAutor() 
 	}
 	method fanAutor(){
-		var autor = librosUsados.first().autor()
-		return (librosUsados.all({libro => libro.autor() == autor}) and
+		var autor = librosUsados.first().nomAutor()
+		return (librosUsados.all({libro => libro.nomAutor() == autor}) and
 			librosUsados.size()>1
 		) 
 	}
 	method libroHeavy(){
 		return librosUsados.any({libro => libro.cantPaginas()>500})
 	}
+	
 	method sirveParaBroncearse(){
 		return false
 	}

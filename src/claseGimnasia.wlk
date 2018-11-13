@@ -2,7 +2,7 @@ class ClaseGimnasia {
 	const idiomas = ["Español"]
 	
 	method getIdiomas(){
-		idiomas.asList()
+		return idiomas.asList()
 	}
 	method implicaEsfuerzo() { return true }
 	method sirveParaBroncearse() { return false}
